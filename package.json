@@ -1,0 +1,23 @@
+{
+  "name": "hsopital-coding-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "hospital-lib-build-dev": "yarn workspace hospital-lib build:dev",
+    "hospital-lib-build-prod": "yarn workspace hospital-lib build:prod",
+    "hospital-lib-test": "yarn workspace hospital-lib test"
+  },
+  "dependencies": {
+    "typescript": "^5.3.3"
+  },
+  "workspaces": [
+    "hospital-lib"
+  ],
+  "volta": {
+    "node": "18.19.0",
+    "yarn": "4.1.0"
+  },
+  "author": "rickylabs",
+  "license": "MIT"
+}
