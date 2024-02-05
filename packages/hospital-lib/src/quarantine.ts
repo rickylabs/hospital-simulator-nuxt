@@ -21,7 +21,7 @@ enum DrugInteractions {
     Aspirin = 'CuresFever',
     Antibiotic = 'CuresTuberculosis',
     Insulin = 'PreventsDiabeticDeath',
-    Paracetamol = 'CuresFever',
+    Paracetamol = 'AlsoCuresFever',
 }
 
 export class Quarantine {

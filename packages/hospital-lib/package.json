@@ -1,0 +1,27 @@
+{
+  "name": "hospital-lib",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.11.15",
+    "alsatian": "^3.2.1",
+    "tap-bark": "^2.3.1",
+    "ts-node": "10.9.2",
+    "typescript": "5.3.3"
+  },
+  "devDependencies": {
+    "vite": "^2.7.3",
+    "vite-tsconfig-paths": "^4.3.1"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "test": "ts-node --project tsconfig.test.json ./config/run-test"
+  },
+  "volta": {
+    "node": "18.19.0"
+  }
+}

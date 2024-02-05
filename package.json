@@ -1,22 +1,24 @@
 {
-  "name": "hsopital-coding-challenge",
+  "name": "hospital-coding-challenge",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "hospital-lib-build-dev": "yarn workspace hospital-lib build:dev",
-    "hospital-lib-build-prod": "yarn workspace hospital-lib build:prod",
-    "hospital-lib-test": "yarn workspace hospital-lib test"
+    "fe-build-dev": "pnpm -r --filter apps/hospital-fe dev",
+    "fe-build-build": "pnpm -r --filter apps/hospital-fe build",
+    "fe-preview": "pnpm -r --filter apps/hospital-fe preview",
+    "lib-build-dev": "pnpm -r --filter packages/hospital-lib dev",
+    "lib-build-prod": "pnpm -r --filter packages/hospital-lib build",
+    "lib-test": "pnpm -r --filter packages/hospital-lib test"
   },
-  "dependencies": {
-    "typescript": "^5.3.3"
-  },
-  "workspaces": [
-    "hospital-lib"
-  ],
   "volta": {
     "node": "18.19.0",
     "yarn": "4.1.0"
+  },
+
+  "resolutions": {
+    "vue": "3.3.13"
   },
   "author": "rickylabs",
   "license": "MIT"
