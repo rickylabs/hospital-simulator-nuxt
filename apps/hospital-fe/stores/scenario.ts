@@ -50,6 +50,17 @@ export const useScenarioStore = defineStore('scenarioStore', {
         console.error('Failed to fetch and update status counts:', error)
       }
     },
+    incrementPatientCount(patientType) {
+      if (this.patients[patientType] && this.patients[patientType].value < 100) {
+        this.patients[patientType].value++;
+      }
+    },
+
+    decrementPatientCount(patientType) {
+      if (this.patients[patientType] && this.patients[patientType].value > 0) {
+        this.patients[patientType].value--;
+      }
+    },
     async fetchDrugs() {
       try {
         const data = await $fetch('/api/hospital/drugs') // replace with your server's URL
@@ -58,6 +69,11 @@ export const useScenarioStore = defineStore('scenarioStore', {
         this.drugs = {...this.drugs, ...drugs};
       } catch (error) {
         console.error('Failed to fetch and update status counts:', error)
+      }
+    },
+    toggleDrug(drugType) {
+      if (this.drugs[drugType]) {
+        this.drugs[drugType].value = this.drugs[drugType].value === 0 ? 1 : 0;
       }
     },
     async shuffle(type) {

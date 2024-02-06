@@ -1,6 +1,7 @@
 <script setup>
 const store = useScenarioStore()
 await callOnce(store.fetchDrugs)
+
 </script>
 <template>
   <UContainer as="section" id="drugs" class="mb-8">
@@ -8,12 +9,18 @@ await callOnce(store.fetchDrugs)
     <div v-if="Object.keys(store.drugs).length" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
       <div v-for="(drug) in store.drugs" :key="drug" class="">
         <UCard>
-          <div class="flex items-center space-x-4">
-            <UAvatar :alt="drug.type" size="sm" />
-            <div class="space-y-2">
-              <div class="h-4 w-[250px]">{{ drug.label }}</div>
-              <div class="h-4 w-[200px]">{{ drug.value }}</div>
+          <div class="flex items-center space-x-0 md:space-x-4 w-full">
+            <UAvatar :alt="drug.type" size="sm" class="hidden md:flex"/>
+            <div class="flex items-center space-y-2 w-full">
+              <div class="h-6">{{ drug.label }}</div>
             </div>
+            <UToggle
+              @change="store.toggleDrug(drug.type)"
+              on-icon="i-heroicons-check-20-solid"
+              off-icon="i-heroicons-x-mark-20-solid"
+              v-model="drug.value"
+              class="position-absolute right-0"
+            />
           </div>
         </UCard>
       </div>

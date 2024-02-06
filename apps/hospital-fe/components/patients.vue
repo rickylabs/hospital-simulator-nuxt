@@ -8,13 +8,31 @@ await callOnce(store.fetchPatientsStatus)
     <div v-if="Object.keys(store.patients).length" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
       <div v-for="(patient) in store.patients" :key="patient" class="">
         <UCard>
-          <div class="flex items-center space-x-4">
-            <UAvatar :alt="patient.type" size="sm" />
-            <div class="space-y-2">
-              <div class="h-4 w-[250px]">{{ patient.label }}</div>
-              <div class="h-4 w-[270px]">
-                {{patient.type === "X" ? "We won't even try :)" : patient.value + "  patient(s)"}}
+          <div class="flex flex-row flex-wrap items-center gap-8">
+            <div class="flex items-center space-x-4 grow ">
+              <UAvatar :alt="patient.type" size="sm" />
+              <div :class="patient.type === 'X' ? 'h-20 md:h-10' : 'space-y-2'">
+                <div class="h-4 leading-4 mb-2">{{ patient.label }}</div>
+                <div class="h-4 font-bold">
+                  {{patient.type === "X" ? "Hopefully not ;)" : patient.value + "  patient(s)"}}
+                </div>
               </div>
+            </div>
+            <div :class="patient.type === 'X' ? 'hidden' : 'flex gap-3 ml-auto justify-between grow md:grow-0'">
+              <UButton
+                @click="store.decrementPatientCount(patient.type)"
+                icon="i-lucide-minus"
+                variant="outline"
+                color="primary"
+                size="sm"
+              />
+              <UButton
+                @click="store.incrementPatientCount(patient.type)"
+                icon="i-lucide-plus"
+                variant="outline"
+                color="primary"
+                size="sm"
+              />
             </div>
           </div>
         </UCard>
