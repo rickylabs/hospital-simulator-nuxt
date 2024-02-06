@@ -53,12 +53,16 @@ export const useScenarioStore = defineStore('scenarioStore', {
     incrementPatientCount(patientType) {
       if (this.patients[patientType] && this.patients[patientType].value < 100) {
         this.patients[patientType].value++;
+        this.results = patientsDefault
+        this.completed = false
       }
     },
 
     decrementPatientCount(patientType) {
       if (this.patients[patientType] && this.patients[patientType].value > 0) {
         this.patients[patientType].value--;
+        this.results = patientsDefault
+        this.completed = false
       }
     },
     async fetchDrugs() {
@@ -72,9 +76,23 @@ export const useScenarioStore = defineStore('scenarioStore', {
       }
     },
     toggleDrug(drugType) {
+      const selectedDrugs = Object.keys(this.drugs).filter(drug => this.drugs[drug].value > 0);
+      if(selectedDrugs.length === 2 && this.drugs[drugType].value === 0) {
+        console.warn("cannot select more than 2 drugs")
+        return false;
+      }
+      if(selectedDrugs.length === 1 && this.drugs[drugType].value === 1) {
+        console.warn("cannot unselect the last drug")
+        return false;
+      }
+
       if (this.drugs[drugType]) {
         this.drugs[drugType].value = this.drugs[drugType].value === 0 ? 1 : 0;
+        this.results = patientsDefault
+        this.completed = false
+        return true
       }
+      return false
     },
     async shuffle(type) {
       switch (type) {
@@ -142,6 +160,7 @@ export const useScenarioStore = defineStore('scenarioStore', {
 
       const quarantine = new Quarantine(patientCounts);
       const administeredDrugs = Object.keys(this.drugs).filter(drug => this.drugs[drug].value > 0);
+      console.log('administeredDrugs', administeredDrugs)
 
       quarantine.setDrugs(administeredDrugs);
       quarantine.wait40Days();

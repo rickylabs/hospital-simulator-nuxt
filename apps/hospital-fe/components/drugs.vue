@@ -1,7 +1,21 @@
 <script setup>
 const store = useScenarioStore()
+const toast = useToast()
 await callOnce(store.fetchDrugs)
 
+function toggleDrug(drug) {
+  const updated = store.toggleDrug(drug.type)
+  if(!updated) {
+    toast.add({
+      id: drug.value === 1 ? 'drug-min-reached' : 'drug-max-reached',
+      title: 'Update failed',
+      description: drug.value === 1 ? 'You need at least one drug' : 'You can\'t remove the last drug',
+      icon: 'i-lucide-alert-triangle',
+      timeout: 5000,
+      color:"amber"
+    })
+  }
+}
 </script>
 <template>
   <UContainer as="section" id="drugs" class="mb-8">
@@ -14,13 +28,14 @@ await callOnce(store.fetchDrugs)
             <div class="flex items-center space-y-2 w-full">
               <div class="h-6">{{ drug.label }}</div>
             </div>
-            <UToggle
-              @change="store.toggleDrug(drug.type)"
-              on-icon="i-heroicons-check-20-solid"
-              off-icon="i-heroicons-x-mark-20-solid"
-              v-model="drug.value"
-              class="position-absolute right-0"
-            />
+            <div class="position-absolute right-0">
+              <UToggle
+                @click="toggleDrug(drug)"
+                on-icon="i-heroicons-check-20-solid"
+                off-icon="i-heroicons-x-mark-20-solid"
+                :model-value="!!drug.value"
+              />
+            </div>
           </div>
         </UCard>
       </div>
