@@ -4,7 +4,7 @@ import path from 'path'
 export default defineNuxtConfig({
   modules: [
     '@nuxt/ui',
-    '@pinia/nuxt',
+    '@pinia/nuxt'
   ],
   ui: {
     icons: ['lucide', 'simple-icons']

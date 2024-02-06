@@ -41,8 +41,21 @@
         </div>
 
         <template #footer>
-          <div class="h-8">
-            <UButton :label="progress < maxProgress ? 'Hide' : 'Close'" @click="closeModal" />
+          <div class="h-8 flex flex-row gap-4 justify-between w-full">
+            <div>
+              <UButton
+                :label="progress < maxProgress ? 'Hide' : 'Close'"
+                @click="closeModal(false)"
+                class="gap-1 px-4 py-2 bg-grey-50 dark:bg-grey-400 dark:bg-opacity-100 text-primary-500 dark:text-primary-400 ring-1 ring-inset ring-primary-500 dark:ring-primary-400 ring-opacity-25 dark:ring-opacity-25 hover:bg-lime-500 dark:hover:bg-lime-600 hover:text-white dark:hover:text-white"
+              />
+            </div>
+            <div>
+              <UButton
+                label="Reset"
+                @click="closeModal(true)"
+                :disabled="progress < maxProgress"
+              />
+            </div>
           </div>
         </template>
       </UCard>
@@ -70,14 +83,24 @@ const color = computed(() => {
   }
 });
 
-const closeModal = () => {
+const closeModal = (reset: boolean) => {
   isOpen.value = false;
-  progress.value = 0; // Reset progress when closing modal
-  router.replace({}); // Clear the query parameters
+  // Delay the simulation call to ensure UI updates
+  setTimeout(() => {
+    router.replace({}); // Clear the query parameters
+    if(reset) {
+      progress.value = 0;
+      store.shuffle()
+    }
+  }, 200);
 };
 
 const simulate = () => {
   isOpen.value = true;
+  if(store.completed){
+    progress.value = maxProgress;
+    return
+  }
   progress.value = 0;
   const totalDuration = 5000; // Total duration of 5 seconds
   const updatesPerSecond = 20; // More frequent updates for smoother transition

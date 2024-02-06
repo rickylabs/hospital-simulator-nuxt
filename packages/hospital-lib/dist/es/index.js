@@ -122,4 +122,18 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-export { Drug, DrugFullName, PatientState, PatientStateFullName, Quarantine, getRandomInt };
+const treatment = Object.values(Drug);
+const status = Object.values(PatientState).filter((state) => state !== PatientState.Dead);
+const MIN = 0;
+const MAX = 3;
+function generatePatientsStatus({ min, max }) {
+  const minNumber = min && min > 0 ? min : MIN;
+  const maxNumber = max && max > 0 ? max : MAX;
+  return status.flatMap((status2) => new Array(getRandomInt(minNumber, maxNumber)).fill(status2)).join(",");
+}
+function generateDrugs() {
+  const randomIndexOne = getRandomInt(0, treatment.length - 1);
+  const randomIndexTwo = getRandomInt(0, treatment.length - 1);
+  return randomIndexOne !== randomIndexTwo ? treatment[randomIndexOne] + "," + treatment[randomIndexTwo] : treatment[randomIndexOne];
+}
+export { Drug, DrugFullName, PatientState, PatientStateFullName, Quarantine, generateDrugs, generatePatientsStatus, getRandomInt };

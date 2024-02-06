@@ -1,3 +1,8 @@
+/*
+  Custom implementation have been added to packages/hospital/lib/src/helpers/formatter.ts
+  to allow usage of Nuxt server APIs ("/api/hospital/patients" and "/api/hospital/drugs") in production deployment.
+  Below implementation is untouched and is only used for local development using .env variable "USE_LOCAL_API" in hospital-fe.
+ */
 const express = require('express');
 const _ = require('lodash');
 const app = express();
