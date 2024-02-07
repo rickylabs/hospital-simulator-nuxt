@@ -8,6 +8,9 @@ import {
   DrugInteractions
 } from "hospital-lib/dist/es/index";
 
+const patientsAPI = process.env.LOCAL_API ? process.env.LOCAL_API + "/patients" :  '/api/hospital/patients';
+const drugsAPI = process.env.LOCAL_API ? process.env.LOCAL_API + "/drugs" :  '/api/hospital/drugs';
+
 function formatResponse(statuses, labels) {
   return statuses.split(',').reduce((acc, key) => {
     const count = (acc[key]?.value || 0) + 1;
@@ -42,8 +45,9 @@ export const useScenarioStore = defineStore('scenarioStore', {
   }),
   actions: {
     async fetchPatientsStatus() {
+      console.log(patientsAPI)
       try {
-        const data = await $fetch('/api/hospital/patients') // replace with your server's URL
+        const data = await $fetch(patientsAPI) // replace with your server's URL
         const patients = formatResponse(data, PatientStateFullName);
         this.patients = patientsDefault
         this.patients = {...this.patients, ...patients};
@@ -68,7 +72,7 @@ export const useScenarioStore = defineStore('scenarioStore', {
     },
     async fetchDrugs() {
       try {
-        const data = await $fetch('/api/hospital/drugs') // replace with your server's URL
+        const data = await $fetch(drugsAPI) // replace with your server's URL
         const drugs = formatResponse(data, DrugFullName);
         this.drugs = drugsDefault
         this.drugs = {...this.drugs, ...drugs};

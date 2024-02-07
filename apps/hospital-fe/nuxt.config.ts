@@ -11,5 +11,11 @@ export default defineNuxtConfig({
   },
   devtools: {
     enabled: true
-  }
+  },
+  runtimeConfig: {
+    public: {
+      LOCAL_API: process.env.LOCAL_API,
+
+    },
+  },
 })
