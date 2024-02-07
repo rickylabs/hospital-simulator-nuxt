@@ -13,6 +13,15 @@ var Drug = /* @__PURE__ */ ((Drug2) => {
   Drug2["Paracetamol"] = "P";
   return Drug2;
 })(Drug || {});
+var DrugInteractions = /* @__PURE__ */ ((DrugInteractions2) => {
+  DrugInteractions2["ParacetamolAndAspirin"] = "Death";
+  DrugInteractions2["AntibioticAndInsulin"] = "FeverForHealthy";
+  DrugInteractions2["Aspirin"] = "CuresFever";
+  DrugInteractions2["Antibiotic"] = "CuresTuberculosis";
+  DrugInteractions2["Insulin"] = "PreventsDiabeticDeath";
+  DrugInteractions2["Paracetamol"] = "AlsoCuresFever";
+  return DrugInteractions2;
+})(DrugInteractions || {});
 const _Quarantine = class {
   constructor(patients) {
     this.hasStateChanged = /* @__PURE__ */ new Set();
@@ -31,14 +40,6 @@ const _Quarantine = class {
     const sortedDrugs = drugs.sort((a, b) => a.localeCompare(b));
     const drugKey = sortedDrugs.join("");
     return drugInteractionMap[drugKey] || null;
-  }
-  updateState(fromState, toState) {
-    if (this.hasStateChanged.size > 0) {
-      return;
-    }
-    this.patientStates[toState] += this.patientStates[fromState];
-    this.patientStates[fromState] = 0;
-    this.hasStateChanged.add(fromState);
   }
   setDrugs(drugs) {
     this.drugsAdministered = drugs;
@@ -132,8 +133,19 @@ function generatePatientsStatus({ min, max }) {
   return status.flatMap((status2) => new Array(getRandomInt(minNumber, maxNumber)).fill(status2)).join(",");
 }
 function generateDrugs() {
-  const randomIndexOne = getRandomInt(0, treatment.length - 1);
-  const randomIndexTwo = getRandomInt(0, treatment.length - 1);
-  return randomIndexOne !== randomIndexTwo ? treatment[randomIndexOne] + "," + treatment[randomIndexTwo] : treatment[randomIndexOne];
+  const quarantine = new Quarantine({});
+  let drugCombination = null;
+  let interaction = null;
+  do {
+    const numberOfDrugs = getRandomInt(1, treatment.length);
+    const drugs = [];
+    for (let i = 0; i < numberOfDrugs; i++) {
+      const randomIndex = getRandomInt(0, treatment.length - 1);
+      drugs.push(treatment[randomIndex]);
+    }
+    drugCombination = drugs.sort((a, b) => a.localeCompare(b)).join(",");
+    interaction = quarantine.determineInteraction(drugs);
+  } while (interaction === null);
+  return drugCombination;
 }
-export { Drug, DrugFullName, PatientState, PatientStateFullName, Quarantine, generateDrugs, generatePatientsStatus, getRandomInt };
+export { Drug, DrugFullName, DrugInteractions, PatientState, PatientStateFullName, Quarantine, generateDrugs, generatePatientsStatus, getRandomInt };

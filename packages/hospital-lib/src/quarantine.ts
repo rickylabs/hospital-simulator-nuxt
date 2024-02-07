@@ -15,7 +15,7 @@ export enum Drug {
     Paracetamol = "P"
 }
 
-enum DrugInteractions {
+export enum DrugInteractions {
     ParacetamolAndAspirin = 'Death',
     AntibioticAndInsulin = 'FeverForHealthy',
     Aspirin = 'CuresFever',
@@ -35,7 +35,7 @@ export class Quarantine {
         this.drugsAdministered = [];
     }
 
-    private determineInteraction(drugs: Drug[]): DrugInteractions {
+    public determineInteraction(drugs: Drug[]): DrugInteractions {
         const drugInteractionMap: { [key: string]: DrugInteractions } = {
             // Combinations of drugs should always respect alphabetical order
             [`${Drug.Aspirin}${Drug.Paracetamol}`]: DrugInteractions.ParacetamolAndAspirin,
@@ -50,16 +50,6 @@ export class Quarantine {
         const sortedDrugs = drugs.sort((a, b) => a.localeCompare(b));
         const drugKey = sortedDrugs.join('');
         return drugInteractionMap[drugKey] || null;
-    }
-
-    private updateState(fromState: PatientState, toState: PatientState): void {
-        if (this.hasStateChanged.size > 0) {
-            //throw new Error('A state transition has already been applied');
-            return
-        }
-        this.patientStates[toState] += this.patientStates[fromState];
-        this.patientStates[fromState] = 0;
-        this.hasStateChanged.add(fromState);
     }
 
     public setDrugs(drugs: Drug[]): void {
