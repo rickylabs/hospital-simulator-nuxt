@@ -2,7 +2,6 @@
 
 ## Installation
 
-Make sur to have yarn installed.
-(Has not been tested with NPM, but should work also.)
+Make sur to have pnpm installed.
 
 All instructions are in the hospital.pdf
