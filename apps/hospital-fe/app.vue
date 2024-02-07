@@ -1,16 +1,12 @@
 <script setup>
-const links = [{
-  label: 'Features',
-  to: '#features',
-  exactHash: true
-}, {
-  label: 'Documentation',
-  to: 'https://ui.nuxt.com/pro',
-  target: '_blank'
-}]
+const links = [
+  // Add your links here
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' }
+]
 
 useHead({
-  title: 'Nuxt UI Pro - Starter',
+  title: 'Hospital Simulator',
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' }
   ],
@@ -23,7 +19,7 @@ useHead({
 })
 
 useSeoMeta({
-  description: 'Nuxt UI Pro is a collection of premium components built on top of Nuxt UI to create beautiful & responsive Nuxt applications in minutes.'
+  description: 'Powered by Nuxt'
 })
 </script>
 

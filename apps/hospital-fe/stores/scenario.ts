@@ -5,6 +5,7 @@ import {
   PatientStateFullName,
   Drug,
   DrugFullName,
+  DrugInteractions
 } from "hospital-lib/dist/es/index";
 
 function formatResponse(statuses, labels) {
@@ -76,14 +77,36 @@ export const useScenarioStore = defineStore('scenarioStore', {
       }
     },
     toggleDrug(drugType) {
-      const selectedDrugs = Object.keys(this.drugs).filter(drug => this.drugs[drug].value > 0);
+      let selectedDrugs = Object.keys(this.drugs).filter(drug => this.drugs[drug].value > 0);
       if(selectedDrugs.length === 2 && this.drugs[drugType].value === 0) {
         console.warn("cannot select more than 2 drugs")
-        return false;
+        return "max";
       }
       if(selectedDrugs.length === 1 && this.drugs[drugType].value === 1) {
-        console.warn("cannot unselect the last drug")
-        return false;
+        console.warn("you should select at least one drug")
+        //return "min";
+      }
+      console.log(selectedDrugs)
+
+      // Check if the drug is already selected
+      if (selectedDrugs.includes(drugType)) {
+        // If it is, remove it from the selectedDrugs array
+        selectedDrugs = selectedDrugs.filter(drug => drug !== drugType);
+      } else {
+        // If it's not, add it to the selectedDrugs array
+        selectedDrugs = [...selectedDrugs, drugType];
+      }
+
+      if(selectedDrugs.length){
+        // Create an instance of the Quarantine class
+        const quarantine = new Quarantine({});
+
+        // Check if the new combination is safe
+        const interaction = quarantine.determineInteraction(selectedDrugs);
+        if (interaction === null) {
+          console.warn("The new combination of drugs is not handled yet. Please try another combination.")
+          return "unhandled";
+        }
       }
 
       if (this.drugs[drugType]) {

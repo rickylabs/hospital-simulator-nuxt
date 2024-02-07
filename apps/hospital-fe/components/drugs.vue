@@ -5,15 +5,41 @@ await callOnce(store.fetchDrugs)
 
 function toggleDrug(drug) {
   const updated = store.toggleDrug(drug.type)
-  if(!updated) {
-    toast.add({
-      id: drug.value === 1 ? 'drug-min-reached' : 'drug-max-reached',
-      title: 'Update failed',
-      description: drug.value === 1 ? 'You need at least one drug' : 'You can\'t remove the last drug',
-      icon: 'i-lucide-alert-triangle',
-      timeout: 5000,
-      color:"amber"
-    })
+  if(typeof updated === "string"){
+    switch (updated) {
+      case "min":
+        toast.add({
+          id: 'drug-min-reached',
+          title: 'Update failed',
+          description: 'You need at least one drug',
+          icon: 'i-lucide-alert-triangle',
+          timeout: 5000,
+          color: "amber"
+        })
+        break
+      case "max":
+        toast.add({
+          id: 'drug-min-reached',
+          title: 'Update failed',
+          description: 'You can\'t combine more than 2 drugs',
+          icon: 'i-lucide-alert-triangle',
+          timeout: 5000,
+          color: "amber"
+        })
+        break
+      case "unhandled":
+        toast.add({
+          id: 'drug-combination-unhandled',
+          title: 'Update failed',
+          description: 'This combination is not handled yet',
+          icon: 'i-lucide-alert-triangle',
+          timeout: 5000,
+          color: "amber"
+        })
+        break
+      default:
+        break
+    }
   }
 }
 </script>

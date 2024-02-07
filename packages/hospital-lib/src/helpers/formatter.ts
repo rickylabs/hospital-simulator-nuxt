@@ -1,5 +1,5 @@
 import {getRandomInt} from "./random-int.ts";
-import {Drug, PatientState} from "../quarantine.ts";
+import {Quarantine, Drug, PatientState} from "../quarantine.ts";
 
 const treatment = Object.values(Drug);
 const status = Object.values(PatientState).filter(state => state !== PatientState.Dead);
@@ -19,9 +19,21 @@ export function generatePatientsStatus({min, max}: PatientStatusParams) {
 }
 
 export function generateDrugs () {
-    const randomIndexOne = getRandomInt(0, treatment.length - 1);
-    const randomIndexTwo = getRandomInt(0, treatment.length - 1);
-    return randomIndexOne !== randomIndexTwo ?
-        treatment[randomIndexOne] + "," + treatment[randomIndexTwo]
-        : treatment[randomIndexOne];
+    const quarantine = new Quarantine({});
+    let drugCombination = null;
+    let interaction = null;
+
+    // Iterate until a valid drug combination is found
+    do {
+        const numberOfDrugs = getRandomInt(1, treatment.length);
+        const drugs = [];
+        for (let i = 0; i < numberOfDrugs; i++) {
+            const randomIndex = getRandomInt(0, treatment.length - 1);
+            drugs.push(treatment[randomIndex]);
+        }
+        drugCombination = drugs.sort((a, b) => a.localeCompare(b)).join(',');
+        interaction = quarantine.determineInteraction(drugs);
+    } while (interaction === null);
+
+    return drugCombination;
 }
