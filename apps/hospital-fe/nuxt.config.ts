@@ -1,10 +1,11 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
-import path from 'path'
+// https://nuxt.com/docs/api/configuration/nuxt-config7
+import eslintConfig from './.eslintrc.cjs'
 
 export default defineNuxtConfig({
   modules: [
     '@nuxt/ui',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxtjs/eslint-module',//comment to disable lint in dev mode
   ],
   ui: {
     icons: ['lucide', 'simple-icons']
@@ -18,4 +19,9 @@ export default defineNuxtConfig({
 
     },
   },
+  eslint: {
+    overrideConfig: {
+      rules: eslintConfig.rules
+    }
+  }
 })

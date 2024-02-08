@@ -1,10 +1,4 @@
 <script setup>
-const links = [
-  // Add your links here
-  { to: '/', label: 'Home' },
-  { to: '/about', label: 'About' }
-]
-
 useHead({
   title: 'Hospital Simulator',
   meta: [
@@ -23,22 +17,21 @@ useSeoMeta({
 })
 </script>
 
-<style>
-html {
-  overflow-x: hidden;
-}
-</style>
-
 <template>
   <Body class="flex flex-col min-h-screen max-w-full overflow-hidden">
-    <NuxtPage/>
+    <NuxtPage />
 
-    <div class="h-12 w-full"/>
+    <div class="h-12 w-full" />
 
     <footer class="fixed bottom-0 flex flex-row gap-4 p-4 w-screen justify-center">
       Copyright Rickylabs © {{ new Date().getFullYear() }}
     </footer>
     <UNotifications />
   </Body>
-
 </template>
+
+<style>
+html {
+  overflow-x: hidden;
+}
+</style>

@@ -11,6 +11,9 @@ module.exports = {
     // Vue
     'vue/multi-word-component-names': 0,
     'vue/max-attributes-per-line': 'off',
-    'vue/no-v-html': 0
+    'vue/no-v-html': 0,
+    'vue/no-multiple-template-root': 'off',
+    'vue/no-useless-template-attributes': 'off',
+    'vue/no-unused-vars': 'off',
   }
 }

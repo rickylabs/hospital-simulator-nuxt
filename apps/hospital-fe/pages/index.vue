@@ -6,10 +6,12 @@ await callOnce(store.fetchDrugs)
 </script>
 <template>
   <header class="flex flex-row gap-4 p-4 w-full align-center h-full">
-    <div class="w-96">Hospital Simulator <UBadge label="0.0.1" variant="subtle" class="mb-0.5" /></div>
+    <div class="w-96">
+      Hospital Simulator <UBadge label="0.0.1" variant="subtle" class="mb-0.5" />
+    </div>
   </header>
 
-  <UContainer as="section" id="hero" class="py-8">
+  <UContainer id="hero" as="section" class="py-8">
     <div class="">
       <div class="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
         <img
@@ -18,7 +20,7 @@ await callOnce(store.fetchDrugs)
           height="550"
           alt="Hero"
           class="mx-auto aspect-video overflow-hidden rounded-xl object-bottom sm:w-full lg:order-last lg:aspect-square"
-        />
+        >
         <div class="flex flex-col justify-center space-y-8">
           <div class="space-y-2">
             <h1 class="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
@@ -29,15 +31,14 @@ await callOnce(store.fetchDrugs)
             </p>
           </div>
           <div class="flex flex-col gap-4 min-[400px]:flex-row">
-            <Simulate/>
-            <History/>
+            <Simulate />
+            <History />
           </div>
         </div>
       </div>
     </div>
   </UContainer>
 
-  <Patients/>
-  <Drugs/>
-
+  <Patients />
+  <Drugs />
 </template>

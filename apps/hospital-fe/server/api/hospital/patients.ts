@@ -1,5 +1,5 @@
-import {generatePatientsStatus} from "hospital-lib/dist/es";
+import {generatePatientsStatus} from 'hospital-lib/dist/es'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(() => {
   return generatePatientsStatus({min: 0, max: 3})
-});
+})

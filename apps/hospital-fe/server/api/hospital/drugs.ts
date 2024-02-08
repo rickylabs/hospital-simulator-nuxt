@@ -1,5 +1,5 @@
-import {generateDrugs} from "hospital-lib/dist/es";
+import {generateDrugs} from 'hospital-lib/dist/es'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(() => {
   return generateDrugs()
-});
+})
