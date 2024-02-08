@@ -4,22 +4,21 @@ import {
   PatientState,
   PatientStateFullName,
   Drug,
-  DrugFullName,
-  DrugInteractions
-} from "hospital-lib/dist/es/index";
+  DrugFullName
+} from 'hospital-lib/dist/es/index'
 
-const patientsAPI = process.env.LOCAL_API ? process.env.LOCAL_API + "/patients" :  '/api/hospital/patients';
-const drugsAPI = process.env.LOCAL_API ? process.env.LOCAL_API + "/drugs" :  '/api/hospital/drugs';
+const patientsAPI = process.env.LOCAL_API ? process.env.LOCAL_API + '/patients' :  '/api/hospital/patients'
+const drugsAPI = process.env.LOCAL_API ? process.env.LOCAL_API + '/drugs' :  '/api/hospital/drugs'
 
 function formatResponse(statuses, labels) {
   return statuses.split(',').reduce((acc, key) => {
-    const count = (acc[key]?.value || 0) + 1;
+    const count = (acc[key]?.value || 0) + 1
     acc[key] = {
       type: key,
       value: count,
       label: labels[key]
-    };
-    return acc;
+    }
+    return acc
   }, {})
 }
 
@@ -48,16 +47,16 @@ export const useScenarioStore = defineStore('scenarioStore', {
       console.log(patientsAPI)
       try {
         const data = await $fetch(patientsAPI) // replace with your server's URL
-        const patients = formatResponse(data, PatientStateFullName);
+        const patients = formatResponse(data, PatientStateFullName)
         this.patients = patientsDefault
-        this.patients = {...this.patients, ...patients};
+        this.patients = {...this.patients, ...patients}
       } catch (error) {
         console.error('Failed to fetch and update status counts:', error)
       }
     },
     incrementPatientCount(patientType) {
       if (this.patients[patientType] && this.patients[patientType].value < 100) {
-        this.patients[patientType].value++;
+        this.patients[patientType].value++
         this.results = patientsDefault
         this.completed = false
       }
@@ -65,7 +64,7 @@ export const useScenarioStore = defineStore('scenarioStore', {
 
     decrementPatientCount(patientType) {
       if (this.patients[patientType] && this.patients[patientType].value > 0) {
-        this.patients[patientType].value--;
+        this.patients[patientType].value--
         this.results = patientsDefault
         this.completed = false
       }
@@ -73,21 +72,21 @@ export const useScenarioStore = defineStore('scenarioStore', {
     async fetchDrugs() {
       try {
         const data = await $fetch(drugsAPI) // replace with your server's URL
-        const drugs = formatResponse(data, DrugFullName);
+        const drugs = formatResponse(data, DrugFullName)
         this.drugs = drugsDefault
-        this.drugs = {...this.drugs, ...drugs};
+        this.drugs = {...this.drugs, ...drugs}
       } catch (error) {
         console.error('Failed to fetch and update status counts:', error)
       }
     },
     toggleDrug(drugType) {
-      let selectedDrugs = Object.keys(this.drugs).filter(drug => this.drugs[drug].value > 0);
+      let selectedDrugs = Object.keys(this.drugs).filter(drug => this.drugs[drug].value > 0)
       if(selectedDrugs.length === 2 && this.drugs[drugType].value === 0) {
-        console.warn("cannot select more than 2 drugs")
-        return "max";
+        console.warn('cannot select more than 2 drugs')
+        return 'max'
       }
       if(selectedDrugs.length === 1 && this.drugs[drugType].value === 1) {
-        console.warn("you should select at least one drug")
+        console.warn('you should select at least one drug')
         //return "min";
       }
       console.log(selectedDrugs)
@@ -95,26 +94,26 @@ export const useScenarioStore = defineStore('scenarioStore', {
       // Check if the drug is already selected
       if (selectedDrugs.includes(drugType)) {
         // If it is, remove it from the selectedDrugs array
-        selectedDrugs = selectedDrugs.filter(drug => drug !== drugType);
+        selectedDrugs = selectedDrugs.filter(drug => drug !== drugType)
       } else {
         // If it's not, add it to the selectedDrugs array
-        selectedDrugs = [...selectedDrugs, drugType];
+        selectedDrugs = [...selectedDrugs, drugType]
       }
 
       if(selectedDrugs.length){
         // Create an instance of the Quarantine class
-        const quarantine = new Quarantine({});
+        const quarantine = new Quarantine({})
 
         // Check if the new combination is safe
-        const interaction = quarantine.determineInteraction(selectedDrugs);
+        const interaction = quarantine.determineInteraction(selectedDrugs)
         if (interaction === null) {
-          console.warn("The new combination of drugs is not handled yet. Please try another combination.")
-          return "unhandled";
+          console.warn('The new combination of drugs is not handled yet. Please try another combination.')
+          return 'unhandled'
         }
       }
 
       if (this.drugs[drugType]) {
-        this.drugs[drugType].value = this.drugs[drugType].value === 0 ? 1 : 0;
+        this.drugs[drugType].value = this.drugs[drugType].value === 0 ? 1 : 0
         this.results = patientsDefault
         this.completed = false
         return true
@@ -123,12 +122,12 @@ export const useScenarioStore = defineStore('scenarioStore', {
     },
     async shuffle(type) {
       switch (type) {
-        case "patients":
+        case 'patients':
           await this.fetchPatientsStatus()
-          break;
-        case "drugs":
+          break
+        case 'drugs':
           await this.fetchDrugs()
-          break;
+          break
         default:
           await this.fetchPatientsStatus()
           await this.fetchDrugs()
@@ -138,7 +137,7 @@ export const useScenarioStore = defineStore('scenarioStore', {
     },
     retrieveHistory() {
       try {
-        const history = JSON.parse(localStorage.getItem('history'));
+        const history = JSON.parse(localStorage.getItem('history'))
         if(!history){
           return []
         }
@@ -147,52 +146,52 @@ export const useScenarioStore = defineStore('scenarioStore', {
           return []
         }
         if (this.history.length === 0) {
-          return history;
+          return history
         }
       } catch (error) {
-        console.error('Failed to parse history from cookies:', error);
+        console.error('Failed to parse history from cookies:', error)
       }
-      return [];
+      return []
     },
     saveToHistory() {
-      const timestamp = Date.now();
+      const timestamp = Date.now()
       this.history.push({
         patients: { ...this.patients },
         drugs: { ...this.drugs },
         results: { ...this.results },
         timestamp
-      });
+      })
 
       // Limit history to the last 10 simulations
       if (this.history.length > 10) {
-        this.history = this.history.slice(-10);
+        this.history = this.history.slice(-10)
       }
 
       // Persist history to cookies
-      localStorage.setItem('history', JSON.stringify(this.history));
+      localStorage.setItem('history', JSON.stringify(this.history))
     },
     clearHistory() {
-      const historyCookie = useCookie('history');
-      this.history = [];
+      const historyCookie = useCookie('history')
+      this.history = []
 
       // Clear history from cookies
-      historyCookie.value = null;
+      historyCookie.value = null
     },
     simulateTreatment() {
       // Transform the patients object to match the expected input format for Quarantine
       const patientCounts = Object.values(this.patients).reduce((acc, {type, value}) => {
-        acc[type] = value;
-        return acc;
-      }, {});
+        acc[type] = value
+        return acc
+      }, {})
 
-      const quarantine = new Quarantine(patientCounts);
-      const administeredDrugs = Object.keys(this.drugs).filter(drug => this.drugs[drug].value > 0);
+      const quarantine = new Quarantine(patientCounts)
+      const administeredDrugs = Object.keys(this.drugs).filter(drug => this.drugs[drug].value > 0)
       console.log('administeredDrugs', administeredDrugs)
 
-      quarantine.setDrugs(administeredDrugs);
-      quarantine.wait40Days();
+      quarantine.setDrugs(administeredDrugs)
+      quarantine.wait40Days()
 
-      const results = quarantine.report();
+      const results = quarantine.report()
       this.results = patientsDefault
 
       // Transform back the results in the store
@@ -201,16 +200,16 @@ export const useScenarioStore = defineStore('scenarioStore', {
           type: key,
           value: results[key],
           label: PatientStateFullName[key]
-        };
-        return acc;
-      }, {});
+        }
+        return acc
+      }, {})
 
       // Save to history after each simulation
-      this.saveToHistory();
+      this.saveToHistory()
       this.completed = true
     },
     initializeStore() {
-      this.history = this.retrieveHistory();
+      this.history = this.retrieveHistory()
     },
   }
 })

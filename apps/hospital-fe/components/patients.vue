@@ -3,8 +3,10 @@ const store = useScenarioStore()
 await callOnce(store.fetchPatientsStatus)
 </script>
 <template>
-  <UContainer as="section" id="patients" class="mb-8">
-    <h2 class="text-2xl font-bold tracking-tighter lg:text-3xl mb-4">Patients States</h2>
+  <UContainer id="patients" as="section" class="mb-8">
+    <h2 class="text-2xl font-bold tracking-tighter lg:text-3xl mb-4">
+      Patients States
+    </h2>
     <div v-if="Object.keys(store.patients).length" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
       <div v-for="(patient) in store.patients" :key="patient" class="">
         <UCard>
@@ -12,26 +14,28 @@ await callOnce(store.fetchPatientsStatus)
             <div class="flex items-center space-x-4 grow ">
               <UAvatar :alt="patient.type" size="sm" />
               <div :class="patient.type === 'X' ? 'h-20 md:h-10' : 'space-y-2'">
-                <div class="h-4 leading-4 mb-2">{{ patient.label }}</div>
+                <div class="h-4 leading-4 mb-2">
+                  {{ patient.label }}
+                </div>
                 <div class="h-4 font-bold">
-                  {{patient.type === "X" ? "Hopefully not ;)" : patient.value + "  patient(s)"}}
+                  {{ patient.type === "X" ? "Hopefully not ;)" : patient.value + "  patient(s)" }}
                 </div>
               </div>
             </div>
             <div :class="patient.type === 'X' ? 'hidden' : 'flex gap-3 ml-auto justify-between grow md:grow-0'">
               <UButton
-                @click="store.decrementPatientCount(patient.type)"
                 icon="i-lucide-minus"
                 variant="outline"
                 color="primary"
                 size="sm"
+                @click="store.decrementPatientCount(patient.type)"
               />
               <UButton
-                @click="store.incrementPatientCount(patient.type)"
                 icon="i-lucide-plus"
                 variant="outline"
                 color="primary"
                 size="sm"
+                @click="store.incrementPatientCount(patient.type)"
               />
             </div>
           </div>

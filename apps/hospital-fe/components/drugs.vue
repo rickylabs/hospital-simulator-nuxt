@@ -5,36 +5,36 @@ await callOnce(store.fetchDrugs)
 
 function toggleDrug(drug) {
   const updated = store.toggleDrug(drug.type)
-  if(typeof updated === "string"){
+  if(typeof updated === 'string'){
     switch (updated) {
-      case "min":
+      case 'min':
         toast.add({
           id: 'drug-min-reached',
           title: 'Update failed',
           description: 'You need at least one drug',
           icon: 'i-lucide-alert-triangle',
           timeout: 5000,
-          color: "amber"
+          color: 'amber'
         })
         break
-      case "max":
+      case 'max':
         toast.add({
           id: 'drug-min-reached',
           title: 'Update failed',
           description: 'You can\'t combine more than 2 drugs',
           icon: 'i-lucide-alert-triangle',
           timeout: 5000,
-          color: "amber"
+          color: 'amber'
         })
         break
-      case "unhandled":
+      case 'unhandled':
         toast.add({
           id: 'drug-combination-unhandled',
           title: 'Update failed',
           description: 'This combination is not handled yet',
           icon: 'i-lucide-alert-triangle',
           timeout: 5000,
-          color: "amber"
+          color: 'amber'
         })
         break
       default:
@@ -44,22 +44,26 @@ function toggleDrug(drug) {
 }
 </script>
 <template>
-  <UContainer as="section" id="drugs" class="mb-8">
-    <h2 class="text-2xl font-bold tracking-tighter lg:text-3xl mb-4">Drugs</h2>
+  <UContainer id="drugs" as="section" class="mb-8">
+    <h2 class="text-2xl font-bold tracking-tighter lg:text-3xl mb-4">
+      Drugs
+    </h2>
     <div v-if="Object.keys(store.drugs).length" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
       <div v-for="(drug) in store.drugs" :key="drug" class="">
         <UCard>
           <div class="flex items-center space-x-0 md:space-x-4 w-full">
-            <UAvatar :alt="drug.type" size="sm" class="hidden md:flex"/>
+            <UAvatar :alt="drug.type" size="sm" class="hidden md:flex" />
             <div class="flex items-center space-y-2 w-full">
-              <div class="h-6">{{ drug.label }}</div>
+              <div class="h-6">
+                {{ drug.label }}
+              </div>
             </div>
             <div class="position-absolute right-0">
               <UToggle
-                @click="toggleDrug(drug)"
                 on-icon="i-heroicons-check-20-solid"
                 off-icon="i-heroicons-x-mark-20-solid"
                 :model-value="!!drug.value"
+                @click="toggleDrug(drug)"
               />
             </div>
           </div>
